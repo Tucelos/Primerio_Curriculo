@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = 1;
     const totalSteps = 5;
 
+    // Imagem transparente de 1 pixel em Base64 para evitar loops de requisições vazias
+    const transparentPixel = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
     // ==========================================================================
     // ELEMENTOS DO DOM
     // ==========================================================================
@@ -41,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnNext = document.getElementById('btn-next');
     const btnClearAll = document.getElementById('btn-clear-all');
     const btnDownloadPdf = document.getElementById('btn-download-pdf');
-    const btnPrintNative = document.getElementById('btn-print-native'); // Novo botão nativo
+    const btnPrintNative = document.getElementById('btn-print-native');
     
     // Foto
     const togglePhoto = document.getElementById('toggle-photo');
@@ -101,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // MÁSCARAS E VALIDAÇÃO DE ENTRADA
     // ==========================================================================
     
-    // Máscara automática de telefone: (XX) XXXXX-XXXX ou (XX) XXXX-XXXX
     const maskPhone = (value) => {
         if (!value) return "";
         value = value.replace(/\D/g, "");
@@ -422,15 +424,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         photoPreviewContainer.classList.add('hidden');
         document.querySelector('.upload-placeholder').classList.remove('hidden');
-        imgProfilePreview.src = '';
-        rImgProfile.src = '';
+        imgProfilePreview.src = transparentPixel;
+        rImgProfile.src = transparentPixel;
         
         updatePreview();
         saveLocalStorage();
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 1: FORMAÇÃO ACADÊMICA (MÁSCARA RESPONSIVA DUO)
+    // COMPONENTE DINÂMICO 1: FORMAÇÃO ACADÊMICA
     // ==========================================================================
     
     const createFormacaoNode = (id, data = {}) => {
@@ -459,7 +461,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <div class="form-group">
                     <label>Período de Estudos</label>
-                    <!-- Grid-Duo impede quebra estreita no mobile para datas -->
                     <div class="grid-duo">
                         <div class="form-group" style="gap: 4px;">
                             <label style="font-size: 11px; color: var(--text-muted);">Ano Início <span class="required">*</span></label>
@@ -542,7 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 2: EXPERIÊNCIAS PROFISSIONAIS OU INFORMAIS (MÁSCARA RESPONSIVA DUO)
+    // COMPONENTE DINÂMICO 2: EXPERIÊNCIAS PROFISSIONAIS OU INFORMAIS
     // ==========================================================================
     
     const createExperienciaNode = (id, data = {}) => {
@@ -571,7 +572,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <div class="form-group col-span-2">
                     <label>Período de Trabalho</label>
-                    <!-- Grid-Duo impede quebra no mobile -->
                     <div class="grid-duo">
                         <div class="form-group" style="gap: 4px;">
                             <label style="font-size: 11px; color: var(--text-muted);">Ano Início <span class="required">*</span></label>
@@ -592,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="form-group col-span-2">
                     <label>Resumo das Atividades <span class="required">*</span></label>
-                    <textarea class="input-exp-desc" rows="3" placeholder="O que você fazia lá? (Ex: Atendimento ao cliente, auxílio no controle de caixa, organização das mercadorias)." required>${data.desc || ''}</textarea>
+                    <textarea class="input-exp-desc" rows="3" placeholder="O que você fazia lá? (Ex: Atendimento ao cliente, auxílio no controle de caixa)." required>${data.desc || ''}</textarea>
                     <span class="error-msg">Por favor, faça um resumo rápido do que você fazia.</span>
                 </div>
             </div>
@@ -660,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 3: CURSOS ADICIONAIS & CERTIFICAÇÕES (MÁSCARA CORRIGIDA)
+    // COMPONENTE DINÂMICO 3: CURSOS ADICIONAIS & CERTIFICAÇÕES
     // ==========================================================================
     
     const createCursoNode = (id, data = {}) => {
@@ -668,9 +668,6 @@ document.addEventListener('DOMContentLoaded', () => {
         item.className = 'dynamic-item';
         item.setAttribute('data-id', id);
         
-        // CORREÇÃO UX/UI: Remove sub-grids internos redundantes.
-        // O Nome do curso ganha largura completa, e a Escola e Carga ficam como itens normais,
-        // garantindo empilhamento limpo no celular sem espremer em "pedacinhos".
         item.innerHTML = `
             <div class="dynamic-item-header">
                 <span class="dynamic-item-title">Curso / Palestra</span>
@@ -740,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 4: IDIOMAS (NOVO REQUISITO)
+    // COMPONENTE DINÂMICO 4: IDIOMAS
     // ==========================================================================
     
     const createIdiomaNode = (id, data = {}) => {
@@ -938,6 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rImgProfile.src = cvData.fotoBase64;
             rPhotoContainer.classList.remove('hidden');
         } else {
+            rImgProfile.src = transparentPixel; // Blindagem
             rPhotoContainer.classList.add('hidden');
         }
 
@@ -1090,9 +1088,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const data = JSON.parse(storedData);
                 
-                // 🛡️ SEGURANÇA DE RETROCOMPATIBILIDADE:
-                // Previne que dados parciais antigos vindos de cookies do navegador
-                // subscrevam e destruam como 'undefined' os arrays dinâmicos novos (idiomas).
                 cvData = {
                     nome: '', email: '', telefone: '', cidade: '', estado: '', linkedin: '', objetivo: '',
                     incluirFoto: false, fotoBase64: '', formacoes: [], experiencias: [], habilidades: [], cursos: [], idiomas: [],
@@ -1199,11 +1194,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // EXPORTAÇÃO E DOWNLOAD DO PDF COM HTML2PDF.JS (CORRIGIDO PARA GITHUB PAGES / SAFARI)
+    // EXPORTAÇÃO NATIVA E DOWNLOAD DO PDF COM HTML2PDF.JS (CORRIGIDO)
     // ==========================================================================
     
-    // Conecta o evento ao botão alternativo nativo (Imprimir / Salvar)
+    // Conecta o evento ao botão nativo de forma isolada e limpa
     btnPrintNative.addEventListener('click', () => {
+        // Remove preventivamente qualquer clone do DOM para garantir que a impressão saia limpa
+        const oldClone = document.getElementById('cv-print-clone-wrapper');
+        if (oldClone) oldClone.remove();
+        
         window.print();
     });
 
@@ -1225,48 +1224,70 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDownloadPdf.setAttribute('disabled', 'true');
         btnDownloadPdf.style.opacity = '0.85';
 
+        // 🛡️ LIMPA CLONES ANTIGOS ANTES DE GERAR
+        const oldClone = document.getElementById('cv-print-clone-wrapper');
+        if (oldClone) oldClone.remove();
+
         // Timer de segurança de fallback
         const printFallbackTimeout = setTimeout(() => {
-            if (confirm("A geração em lote do PDF pelo navegador está demorando. Deseja abrir a tela de salvamento/impressão nativa que é instantânea? (Basta selecionar 'Salvar como PDF' na tela).")) {
+            const activeClone = document.getElementById('cv-print-clone-wrapper');
+            if (activeClone) activeClone.remove(); // 🧹 DESTROI O CLONE ANTES DA TELA DE IMPRESSÃO ABRIR! (Evita páginas em branco)
+            
+            if (confirm("A geração automática do PDF pelo navegador está demorando.\n\nDeseja abrir a tela de salvamento oficial do seu aparelho? Ela é instantânea! (Selecione 'Salvar como PDF' na tela que abrir).")) {
                 window.print();
             }
             btnDownloadPdf.innerHTML = originalContent;
             btnDownloadPdf.removeAttribute('disabled');
             btnDownloadPdf.style.opacity = '1';
-        }, 6000);
+        }, 5000);
 
-        // 🚀 CORREÇÃO CRÍTICA DO TRAVAMENTO DO PDF NO GITHUB PAGES:
-        // Colocar elementos em left: -9999px impede que o Chrome e Safari móveis os renderizem no viewport ativo,
-        // fazendo com que o html2canvas e o gerador de imagem da biblioteca entrem em estado de congelamento.
-        // Solução: Anexar o clone com position: fixed, opacity: 0.01 (invisível ao olho) e z-index: -9999 (por baixo de tudo).
-        // Isso força a renderização gráfica ativa na GPU do celular, liberando o processo instantaneamente!
-        
         const originalElement = document.getElementById('cv-target-render');
         
+        // Cria clone visível de opacidade 0.01 por baixo de tudo para forçar GPU
         const cloneWrapper = document.createElement('div');
         cloneWrapper.id = 'cv-print-clone-wrapper';
         cloneWrapper.style.position = 'fixed';
         cloneWrapper.style.left = '0';
         cloneWrapper.style.top = '0';
-        cloneWrapper.style.width = '210mm'; // Largura física A4 exata
+        cloneWrapper.style.width = '210mm';
         cloneWrapper.style.backgroundColor = '#ffffff';
-        cloneWrapper.style.margin = '0';
-        cloneWrapper.style.padding = '0';
-        cloneWrapper.style.boxSizing = 'border-box';
-        cloneWrapper.style.opacity = '0.01'; // Quase invisível
-        cloneWrapper.style.zIndex = '-9999'; // Fica atrás de absolutamente tudo
-        cloneWrapper.style.pointerEvents = 'none'; // Impede interceptação de cliques do usuário
+        cloneWrapper.style.opacity = '0.01';
+        cloneWrapper.style.zIndex = '-9999';
+        cloneWrapper.style.pointerEvents = 'none';
         
         const clonedElement = originalElement.cloneNode(true);
         clonedElement.style.width = '210mm';
-        clonedElement.style.padding = '35px'; // Margem regulada para o PDF
+        clonedElement.style.padding = '35px';
         clonedElement.style.boxSizing = 'border-box';
         clonedElement.style.display = 'block';
         
-        const clonedImages = clonedElement.querySelectorAll('img');
-        clonedImages.forEach(img => {
-            img.setAttribute('crossorigin', 'anonymous');
+        // 🔒 BLINDAGEM DE FONTES CORS NO CANVAS:
+        // O html2canvas falha/trava em muitos computadores ao tentar ler fontes externas assíncronas do Google Fonts
+        // sob políticas estritas de segurança (GitHub Pages). Forçar fontes nativas do sistema no PDF
+        // faz com que o download seja gerado LOCALMENTE E INSTANTANEAMENTE (em milissegundos)!
+        clonedElement.style.fontFamily = 'Arial, Helvetica, sans-serif';
+        clonedElement.querySelectorAll('*').forEach(el => {
+            el.style.fontFamily = 'Arial, Helvetica, sans-serif';
+            // Garante que cabeçalhos usem Arial Bold
+            if (el.tagName === 'H2' || el.tagName === 'H3' || el.classList.contains('cv-section-title') || el.classList.contains('cv-doc-name')) {
+                el.style.fontFamily = 'Arial, Helvetica, sans-serif';
+                el.style.fontWeight = 'bold';
+            }
         });
+        
+        // 🔒 BLINDAGEM CONTRA IMAGENS QUEBRADAS/FANTASMAS
+        // Se a foto de perfil estiver desativada ou vazia, removemos as tags do clone.
+        // Se estiver ativa, garante que o base64 está setado sem URLs vazias que geram loops infinitos de rede.
+        const clonedPhotoContainer = clonedElement.querySelector('#render-photo-container');
+        const clonedImgProfile = clonedElement.querySelector('#render-img-profile');
+        
+        if (!cvData.incluirFoto || !cvData.fotoBase64) {
+            if (clonedPhotoContainer) clonedPhotoContainer.remove();
+            if (clonedImgProfile) clonedImgProfile.remove();
+        } else {
+            clonedImgProfile.src = cvData.fotoBase64;
+            clonedImgProfile.setAttribute('crossorigin', 'anonymous');
+        }
         
         cloneWrapper.appendChild(clonedElement);
         document.body.appendChild(cloneWrapper);
@@ -1293,17 +1314,23 @@ document.addEventListener('DOMContentLoaded', () => {
         // Roda o html2pdf.js com tratamento de promessa
         html2pdf().set(opt).from(cloneWrapper).save().then(() => {
             clearTimeout(printFallbackTimeout);
-            cloneWrapper.remove();
+            
+            // Destrói o clone Wrapper após o download
+            const wrapperToRemove = document.getElementById('cv-print-clone-wrapper');
+            if (wrapperToRemove) wrapperToRemove.remove();
             
             btnDownloadPdf.innerHTML = originalContent;
             btnDownloadPdf.removeAttribute('disabled');
             btnDownloadPdf.style.opacity = '1';
         }).catch(err => {
-            console.error("Erro na geração do PDF:", err);
+            console.error("Erro na geração do PDF com html2pdf:", err);
             clearTimeout(printFallbackTimeout);
-            cloneWrapper.remove();
             
-            if (confirm("Seu navegador impediu o download automático. Deseja usar o salvamento oficial do aparelho em PDF?")) {
+            // Destrói o clone Wrapper
+            const wrapperToRemove = document.getElementById('cv-print-clone-wrapper');
+            if (wrapperToRemove) wrapperToRemove.remove();
+            
+            if (confirm("Seu navegador impediu o salvamento automático.\n\nDeseja usar o salvamento oficial do aparelho? É instantâneo e garantido!")) {
                 window.print();
             }
             

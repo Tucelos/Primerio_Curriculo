@@ -1331,23 +1331,82 @@ input:checked + .slider:before {
     }
 }
 
-/* Otimização de Impressão */
+/* Otimização de Impressão de Alta Fidelidade (PDF Vetorial Perfeito) */
 @media print {
-    body * {
-        visibility: hidden;
+    /* Reset Geral de Cores e Margens na Impressora */
+    html, body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        -webkit-print-color-adjust: exact !important; /* Preserva cores de fundo das tags no PDF */
+        print-color-adjust: exact !important;
     }
-    #a4-sheet-content, #a4-sheet-content * {
-        visibility: visible;
+
+    /* Oculta absolutamente todos os componentes do app, formulários, stepper e clone */
+    .app-header, 
+    .form-panel, 
+    .app-footer, 
+    .preview-header-bar,
+    .btn-toggle-view,
+    #btn-toggle-view,
+    #cv-print-clone-wrapper,
+    .mobile-only {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
-    #a4-sheet-content {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 210mm;
-        height: 297mm;
-        padding: 0;
-        margin: 0;
-        border: none;
-        box-shadow: none;
+
+    /* Força o painel de visualização a se comportar como fluxo único */
+    .main-container {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-shadow: none !important;
+    }
+
+    .preview-panel {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    .preview-sticky-container {
+        position: relative !important;
+        top: 0 !important;
+        height: auto !important;
+        display: block !important;
+    }
+
+    /* Formata a folha A4 para preencher exatamente a página física de impressão */
+    .a4-sheet {
+        display: block !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        margin: 0 auto !important;
+        padding: 20mm !important; /* Margem interna recomendada para impressão física */
+        border: none !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+        page-break-inside: avoid !important;
+        page-break-after: avoid !important;
+    }
+
+    .cv-document {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    /* Remove os cabeçalhos/rodapés automáticos (data, título, URL) que o navegador costuma injetar */
+    @page {
+        size: A4 portrait;
+        margin: 0; 
     }
 }
