@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crie seu primeiro currículo profissional de forma simples, rápida, segura e 100% gratuita. Ideal para jovens em busca do primeiro emprego, jovem aprendiz e estágio.">
+    <meta name="author" content="Projeto Social - Primeiro Currículo">
+    <title>Meu Primeiro Currículo | Criador de Currículo Grátis e Seguro</title>
+    
+    <!-- Google Fonts - Outfit para Títulos & Inter para Textos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Cabeçalho Principal (Acolhedor) -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <span class="logo-icon">🚀</span>
+                <div>
+                    <h1 class="app-title">Meu Primeiro Currículo</h1>
+                    <p class="app-subtitle">Crie seu currículo de forma simples, rápida e 100% grátis</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="btn-clear-all" class="btn btn-secondary-outline btn-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                    Limpar Dados
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container Principal (Layout Dual: Formulário + Preview) -->
+    <main class="main-container">
+        
+        <!-- Painel Esquerdo: O Formulário Passo a Passo -->
+        <section class="form-panel card">
+            
+            <!-- Indicador de Passos (Stepper) -->
+            <div class="stepper">
+                <div class="stepper-progress">
+                    <div class="stepper-progress-bar" id="stepper-progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="step-nodes">
+                    <button class="step-node active" data-step="1" title="Dados Pessoais">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Pessoal</span>
+                    </button>
+                    <button class="step-node" data-step="2" title="Foto de Perfil">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Foto</span>
+                    </button>
+                    <button class="step-node" data-step="3" title="Escolaridade">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Estudos</span>
+                    </button>
+                    <button class="step-node" data-step="4" title="Experiência">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Experiência</span>
+                    </button>
+                    <button class="step-node" data-step="5" title="Habilidades & Cursos">
+                        <span class="step-number">5</span>
+                        <span class="step-label">Habilidades</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulário Assistente -->
+            <form id="cv-form" novalidate>
+                
+                <!-- PASSO 1: DADOS PESSOAIS -->
+                <div class="step-content active" data-step="1">
+                    <div class="step-header">
+                        <h2>Fale um pouco sobre você 👋</h2>
+                        <p>Estes são os seus dados de contato básicos. Recrutadores usarão para te chamar para entrevistas.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group col-span-2">
+                            <label for="input-nome">Nome Completo <span class="required">*</span></label>
+                            <input type="text" id="input-nome" name="nome" placeholder="Ex: Maria Silva de Souza" required>
+                            <span class="error-msg">Por favor, insira seu nome completo.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-email">E-mail de Contato <span class="required">*</span></label>
+                            <input type="email" id="input-email" name="email" placeholder="Ex: maria.silva@email.com" required>
+                            <span class="error-msg">Insira um e-mail válido (ex: nome@provedor.com).</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-telefone">Telefone / WhatsApp <span class="required">*</span></label>
+                            <input type="tel" id="input-telefone" name="telefone" placeholder="Ex: (11) 98765-4321" required>
+                            <span class="error-msg">Informe um telefone com DDD válido.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-cidade">Cidade <span class="required">*</span></label>
+                            <input type="text" id="input-cidade" name="cidade" placeholder="Ex: São Paulo" required>
+                            <span class="error-msg">Informe sua cidade.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-estado">Estado (UF) <span class="required">*</span></label>
+                            <select id="input-estado" name="estado" required>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                                <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                                <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                                <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                                <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                                <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                                <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                                <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                                <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                            </select>
+                            <span class="error-msg">Selecione o estado.</span>
+                        </div>
+
+                        <div class="form-group col-span-2">
+                            <label for="input-linkedin">Link do LinkedIn <span class="optional">(Opcional)</span></label>
+                            <input type="url" id="input-linkedin" name="linkedin" placeholder="Ex: linkedin.com/in/seu-nome">
+                            <span class="helper-text">Se você não tiver LinkedIn ainda, pode deixar em branco! Não tem problema.</span>
+                        </div>
+
+                        <div class="form-group col-span-2">
+                            <label for="input-objetivo">Objetivo Profissional Curto <span class="required">*</span></label>
+                            <textarea id="input-objetivo" name="objetivo" rows="3" placeholder="Escreva o que você busca e suas principais qualidades." required></textarea>
+                            
+                            <div class="tips-box">
+                                <span class="tips-icon">💡</span>
+                                <div>
+                                    <strong>Dica de Ouro:</strong> Escreva algo sincero e focado no seu desejo de aprender. 
+                                    <div class="tips-suggestions">
+                                        <button type="button" class="btn-suggestion" data-target="input-objetivo">"Busco minha primeira oportunidade no mercado de trabalho para atuar na área administrativa, onde pretendo aplicar minha organização, dedicação aos estudos e vontade de aprender novas rotinas."</button>
+                                        <button type="button" class="btn-suggestion" data-target="input-objetivo">"Procuro uma vaga como Jovem Aprendiz para iniciar minha trajetória profissional. Tenho facilidade com tecnologia, boa comunicação e muito entusiasmo em colaborar com a equipe."</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="error-msg">Por favor, descreva seu objetivo profissional.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASSO 2: FOTO DE PERFIL (OPCIONAL) -->
+                <div class="step-content" data-step="2">
+                    <div class="step-header">
+                        <h2>Sua Foto de Perfil 📸</h2>
+                        <p>Você decide se quer incluir uma foto ou criar um currículo tradicional sem imagem.</p>
+                    </div>
+
+                    <div class="photo-controls">
+                        <!-- Switch Elegante -->
+                        <div class="switch-container card-alt">
+                            <div class="switch-info">
+                                <span class="switch-label">Incluir foto no currículo</span>
+                                <span class="switch-desc">Ative se as vagas desejadas pedirem foto (ex: recepção, atendimento).</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-photo">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+
+                        <!-- Área de Upload (Sempre visível mas ativada pelo switch) -->
+                        <div class="upload-zone disabled" id="upload-zone">
+                            <input type="file" id="input-foto" accept="image/*" disabled class="hidden-input">
+                            <div class="upload-placeholder">
+                                <span class="upload-icon">📷</span>
+                                <p class="upload-text">Arraste sua foto aqui ou <span class="upload-link">clique para selecionar</span></p>
+                                <p class="upload-rules">Formatos recomendados: JPG ou PNG. Máximo 2MB.</p>
+                            </div>
+                            <div class="photo-preview-container hidden" id="photo-preview-container">
+                                <img src="" alt="Sua Foto de Perfil" class="photo-preview-circle" id="img-profile-preview">
+                                <button type="button" id="btn-remove-photo" class="btn-remove-badge">Remover Foto</button>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <span class="alert-icon">💡</span>
+                            <p><strong>Recomendação de Recrutadores:</strong> Hoje em dia, a maioria das empresas prefere currículos <strong>sem foto</strong> para evitar qualquer discriminação inconsciente na triagem inicial. Escolha com confiança!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASSO 3: ESCOLARIDADE / FORMAÇÃO -->
+                <div class="step-content" data-step="3">
+                    <div class="step-header">
+                        <h2>Sua Jornada Escolar 🏫</h2>
+                        <p>Adicione as escolas onde estudou, cursos técnicos ou ensino médio. Pode adicionar mais de uma!</p>
+                    </div>
+
+                    <div class="dynamic-list" id="list-formacao">
+                        <!-- Itens de formação serão inseridos aqui dinamicamente -->
+                    </div>
+
+                    <button type="button" id="btn-add-formacao" class="btn btn-secondary btn-full flex-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Adicionar Formação Acadêmica
+                    </button>
+                </div>
+
+                <!-- PASSO 4: EXPERIÊNCIA (MESMO INFORMAL) -->
+                <div class="step-content" data-step="4">
+                    <div class="step-header">
+                        <h2>Suas Experiências 💼</h2>
+                        <p>Não tem carteira assinada? Sem problemas! Bicos, ajuda na loja de parentes, voluntariados e projetos de escola contam muito!</p>
+                    </div>
+
+                    <div class="tips-box col-span-2 shadow-sutil" style="margin-bottom: 20px;">
+                        <span class="tips-icon">🌟</span>
+                        <div>
+                            <strong>O que colocar aqui se for meu primeiro emprego?</strong>
+                            <ul class="tips-bullets">
+                                <li><strong>Trabalhos informais:</strong> Bicos como passear com cães, dar aulas particulares ou ajudar na organização de festas.</li>
+                                <li><strong>Apoio familiar:</strong> Ajudou no caixa da padaria do tio ou a divulgar a loja de roupas da mãe no Instagram? É experiência de atendimento e redes sociais!</li>
+                                <li><strong>Projetos escolares:</strong> Líder de sala, participação em feira de ciências ou grêmio estudantil.</li>
+                                <li><strong>Trabalho voluntário:</strong> Ajudou a distribuir cestas básicas ou cuidou de crianças em uma ONG.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="dynamic-list" id="list-experiencia">
+                        <!-- Itens de experiência serão inseridos dinamicamente -->
+                    </div>
+
+                    <button type="button" id="btn-add-experiencia" class="btn btn-secondary btn-full flex-center">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Adicionar Experiência
+                    </button>
+                </div>
+
+                <!-- PASSO 5: HABILIDADES & CURSOS EXTRA-CURRICULARES -->
+                <div class="step-content" data-step="5">
+                    <div class="step-header">
+                        <h2>Habilidades & Cursos Extras 🛠️</h2>
+                        <p>Chegou a hora de destacar as coisas que você sabe fazer bem e os cursos que concluiu.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Minhas Habilidades</label>
+                        <p class="helper-text">Selecione as palavras que combinam com você ou escreva as suas!</p>
+                        
+                        <!-- Tags recomendadas de clique rápido -->
+                        <div class="skills-tags-selector">
+                            <button type="button" class="tag-badge-select" data-skill="Comunicação Clara">Comunicação Clara</button>
+                            <button type="button" class="tag-badge-select" data-skill="Trabalho em Equipe">Trabalho em Equipe</button>
+                            <button type="button" class="tag-badge-select" data-skill="Organização">Organização</button>
+                            <button type="button" class="tag-badge-select" data-skill="Informática Básica">Informática Básica</button>
+                            <button type="button" class="tag-badge-select" data-skill="Proatividade">Proatividade</button>
+                            <button type="button" class="tag-badge-select" data-skill="Facilidade para Aprender">Facilidade para Aprender</button>
+                            <button type="button" class="tag-badge-select" data-skill="Pacote Office (Word/Excel)">Pacote Office (Word/Excel)</button>
+                            <button type="button" class="tag-badge-select" data-skill="Atendimento ao Cliente">Atendimento ao Cliente</button>
+                            <button type="button" class="tag-badge-select" data-skill="Pontualidade">Pontualidade</button>
+                            <button type="button" class="tag-badge-select" data-skill="Redes Sociais">Redes Sociais</button>
+                        </div>
+
+                        <!-- Campo para digitar uma nova -->
+                        <div class="skill-custom-input">
+                            <input type="text" id="input-custom-skill" placeholder="Ex: Edição de Vídeo, Atendimento telefônico">
+                            <button type="button" id="btn-add-custom-skill" class="btn btn-secondary">Adicionar</button>
+                        </div>
+
+                        <!-- Lista de Habilidades Adicionadas -->
+                        <div class="skills-selected-container" id="skills-selected-list">
+                            <!-- Inseridas dinamicamente -->
+                            <p class="placeholder-text-muted" id="skills-empty-text">Selecione habilidades acima ou digite as suas para exibir aqui.</p>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <!-- Cursos Livres e Certificações -->
+                    <div class="form-group">
+                        <label>Cursos Adicionais & Idiomas</label>
+                        <p class="helper-text font-weight-normal">Cursos de internet, palestras, oficinas ou idiomas que você fez.</p>
+                        
+                        <div class="dynamic-list" id="list-cursos">
+                            <!-- Cursos serão inseridos dinamicamente -->
+                        </div>
+
+                        <button type="button" id="btn-add-curso" class="btn btn-secondary btn-full flex-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Adicionar Curso / Idioma
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barra de Navegação do Formulário (Ações Inferiores) -->
+                <div class="form-actions">
+                    <button type="button" id="btn-prev" class="btn btn-secondary-outline disabled">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Voltar
+                    </button>
+                    <button type="button" id="btn-next" class="btn btn-primary">
+                        Avançar
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+        <!-- Botão Flutuante de Alternar Visualização (Focado em Mobile) -->
+        <button id="btn-toggle-view" class="btn-toggle-view mobile-only shadow-premium" title="Ver Currículo">
+            <span id="toggle-view-icon">👁️</span>
+            <span id="toggle-view-text">Ver Currículo</span>
+        </button>
+
+        <!-- Painel Direito: Live Preview (A4 Simulado) -->
+        <section class="preview-panel" id="preview-panel">
+            <div class="preview-sticky-container">
+                <div class="preview-header-bar">
+                    <div class="preview-info">
+                        <h3>Visualização do Currículo</h3>
+                        <p>Exatamente como ficará o seu PDF final</p>
+                    </div>
+                    <button type="button" id="btn-download-pdf" class="btn btn-success flex-center shadow-success">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Baixar Currículo (PDF)
+                    </button>
+                </div>
+
+                <!-- Folha A4 Simulada -->
+                <div class="a4-sheet shadow-premium" id="a4-sheet-content">
+                    <div class="cv-document" id="cv-target-render">
+                        
+                        <!-- Cabeçalho do Currículo -->
+                        <header class="cv-doc-header" id="render-header">
+                            <div class="cv-doc-profile-area hidden" id="render-photo-container">
+                                <img src="" alt="Foto de Perfil" class="cv-doc-photo" id="render-img-profile">
+                            </div>
+                            <div class="cv-doc-meta-area">
+                                <h2 class="cv-doc-name" id="render-nome">Seu Nome Completo</h2>
+                                <div class="cv-doc-contacts">
+                                    <span id="render-localizacao" class="cv-meta-item">Cidade, Estado</span>
+                                    <span class="cv-separator">•</span>
+                                    <span id="render-telefone" class="cv-meta-item">Telefone / WhatsApp</span>
+                                    <span class="cv-separator">•</span>
+                                    <span id="render-email" class="cv-meta-item">seu.email@provedor.com</span>
+                                    <span id="render-linkedin-container" class="hidden">
+                                        <span class="cv-separator">•</span>
+                                        <span id="render-linkedin" class="cv-meta-item">linkedin.com/in/seu-nome</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </header>
+
+                        <!-- Objetivo Profissional -->
+                        <section class="cv-doc-section" id="render-sec-objetivo">
+                            <h3 class="cv-section-title">Objetivo Profissional</h3>
+                            <p class="cv-section-content" id="render-objetivo">Escreva suas ambições no painel à esquerda para atualizar seu currículo em tempo real.</p>
+                        </section>
+
+                        <!-- Formação Acadêmica -->
+                        <section class="cv-doc-section hidden" id="render-sec-formacao">
+                            <h3 class="cv-section-title">Formação Acadêmica</h3>
+                            <div class="cv-items-container" id="render-formacoes-list">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </section>
+
+                        <!-- Experiência Profissional / Informais -->
+                        <section class="cv-doc-section hidden" id="render-sec-experiencia">
+                            <h3 class="cv-section-title">Histórico de Atividades & Experiências</h3>
+                            <div class="cv-items-container" id="render-experiencias-list">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </section>
+
+                        <!-- Habilidades -->
+                        <section class="cv-doc-section hidden" id="render-sec-habilidades">
+                            <h3 class="cv-section-title">Habilidades</h3>
+                            <div class="cv-skills-grid" id="render-skills-list">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </section>
+
+                        <!-- Cursos Adicionais -->
+                        <section class="cv-doc-section hidden" id="render-sec-cursos">
+                            <h3 class="cv-section-title">Cursos Complementares & Certificações</h3>
+                            <div class="cv-items-container" id="render-cursos-list">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rodapé de Privacidade (Conformidade com LGPD) -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p class="lgpd-text">
+                🛡️ <strong>Segurança e Privacidade Garantidas (LGPD):</strong> Seus dados estão 100% seguros. 
+                Este sistema não armazena nenhuma informação em servidores externos e não envia dados pessoais para APIs. 
+                Todo o processamento e geração de PDF são feitos localmente no seu próprio navegador e dispositivo.
+            </p>
+            <p class="footer-credit">
+                Desenvolvido com carinho para o Projeto Social Primeiro Currículo • Custo Zero de Hospedagem
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bibliotecas Externas (Configuradas para Geração do PDF no Client-Side) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5IfS5QtgpiJtWd63OerEQ/ODXY0sO1WZF5wUpBuxa5RseylYB1CjCb9sxg1g55IurKR3nszdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Lógica da Aplicação -->
+    <script src="app.js"></script>
+</body>
+</html>

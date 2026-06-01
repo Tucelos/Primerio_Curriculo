@@ -1,0 +1,1346 @@
+/* ==========================================================================
+   DESIGN SYSTEM - VARIÁVEIS E CONFIGURAÇÕES GERAIS
+   ========================================================================== */
+:root {
+    /* Cores do App Web (Estética Acolhedora e Premium) */
+    --primary-color: #4f46e5;       /* Índigo Royal */
+    --primary-hover: #4338ca;
+    --primary-light: #e0e7ff;
+    --secondary-color: #6366f1;     /* Violeta Suave */
+    --success-color: #10b981;       /* Verde Sucesso */
+    --success-hover: #059669;
+    --danger-color: #ef4444;        /* Vermelho Alerta */
+    --danger-hover: #dc2626;
+    --warning-color: #f59e0b;       /* Laranja Suporte */
+    
+    /* Tons Neutros Avançados */
+    --bg-app: #f8fafc;              /* Cinza gelo suave de fundo */
+    --bg-card: #ffffff;             /* Fundo do painel do formulário */
+    --text-main: #1e293b;           /* Azul Escuro Marinho para alta legibilidade */
+    --text-muted: #64748b;          /* Cinza para descrições */
+    --border-color: #e2e8f0;        /* Bordas sutis */
+    --border-hover: #cbd5e1;
+    
+    /* Sombras Premium */
+    --shadow-sutil: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Configurações de Layout */
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* CORES E FONTES DO DOCUMENTO DE CURRÍCULO (A4) - Otimizadas para RH */
+    --cv-bg: #ffffff;
+    --cv-text-dark: #2c3e50;        /* Texto principal clássico */
+    --cv-text-light: #5f6c7d;       /* Subtítulos e datas */
+    --cv-primary: #1e293b;          /* Cor temática do cabeçalho */
+    --cv-border: #cbd5e1;
+}
+
+/* Reset Geral */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   ESTRUTURA DE CABEÇALHO E RODAPÉ (APP)
+   ========================================================================== */
+.app-header {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 16px 0;
+}
+
+.header-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 28px;
+    background: var(--primary-light);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sutil);
+}
+
+.app-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.app-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Rodapé */
+.app-footer {
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-color);
+    padding: 32px 0;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lgpd-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: var(--bg-app);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--success-color);
+}
+
+.footer-credit {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   LAYOUT PRINCIPAL E GRIDS
+   ========================================================================== */
+.main-container {
+    max-width: 1280px;
+    width: 100%;
+    margin: 32px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 32px;
+    align-items: start;
+}
+
+/* Classes Utilitárias de Cartão */
+.card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.card-alt {
+    background-color: var(--bg-app);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+}
+
+/* ==========================================================================
+   STEPPER - INDICADOR DE PASSOS
+   ========================================================================== */
+.stepper {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.stepper-progress {
+    position: absolute;
+    top: 42px;
+    left: 40px;
+    right: 40px;
+    height: 4px;
+    background-color: var(--border-color);
+    z-index: 1;
+    border-radius: 2px;
+}
+
+.stepper-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    width: 0%;
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+.step-nodes {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.step-node {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 64px;
+    outline: none;
+}
+
+.step-number {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.step-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+/* Estados Ativo e Concluído no Stepper */
+.step-node.active .step-number {
+    border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.step-node.active .step-label {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.step-node.completed .step-number {
+    border-color: var(--success-color);
+    background-color: var(--success-color);
+    color: #ffffff;
+}
+
+.step-node.completed .step-label {
+    color: var(--success-color);
+}
+
+/* ==========================================================================
+   FORMULÁRIOS, BOTÕES E COMPONENTES DE INPUT
+   ========================================================================== */
+#cv-form {
+    padding: 32px;
+}
+
+.step-content {
+    display: none;
+    animation: fadeInSlide 0.35s ease forwards;
+}
+
+.step-content.active {
+    display: block;
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-header {
+    margin-bottom: 28px;
+}
+
+.step-header h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+.step-header p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.col-span-2 {
+    grid-column: span 2;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.required {
+    color: var(--danger-color);
+    margin-left: 2px;
+}
+
+.optional {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 11px;
+    margin-left: 4px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-main);
+    background-color: var(--bg-card);
+    transition: var(--transition);
+    outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Mensagens de Erro e Auxiliares */
+.error-msg {
+    color: var(--danger-color);
+    font-size: 12px;
+    margin-top: 2px;
+    display: none;
+}
+
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea {
+    border-color: var(--danger-color);
+    background-color: #fffafb;
+}
+
+.form-group.has-error .error-msg {
+    display: block;
+    animation: shake 0.2s ease;
+}
+
+.helper-text {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* ==========================================================================
+   BOTÕES E COMPONENTES DO FORMULÁRIO
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    outline: none;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sutil);
+}
+
+.btn-secondary {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.btn-secondary:hover {
+    background-color: #cbd5e1;
+    color: var(--primary-hover);
+}
+
+.btn-secondary-outline {
+    background: none;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.btn-secondary-outline:hover:not(.disabled) {
+    background-color: var(--bg-app);
+    border-color: var(--border-hover);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    color: #ffffff;
+}
+
+.btn-success:hover {
+    background-color: var(--success-hover);
+    transform: translateY(-1px);
+}
+
+.btn-danger-outline {
+    background: none;
+    border: 1.5px solid #fee2e2;
+    color: var(--danger-color);
+}
+
+.btn-danger-outline:hover {
+    background-color: #fef2f2;
+    border-color: #fca5a5;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 12px;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.btn-suggestion {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    font-size: 11px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: var(--transition);
+    line-height: 1.4;
+    width: 100%;
+}
+
+.btn-suggestion:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.disabled,
+.btn-secondary-outline.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Divisor */
+.divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 24px 0;
+}
+
+/* Caixa de Dicas Integradas */
+.tips-box {
+    background-color: #f0fdf4;
+    border: 1.5px solid #dcfce7;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.tips-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.tips-box strong {
+    font-size: 13px;
+    color: #14532d;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.tips-box p, .tips-box ul {
+    font-size: 12px;
+    color: #166534;
+    line-height: 1.5;
+}
+
+.tips-bullets {
+    padding-left: 16px;
+    margin-top: 6px;
+}
+
+.tips-bullets li {
+    margin-bottom: 4px;
+}
+
+.tips-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* Alertas Gerais */
+.alert {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.alert-info {
+    background-color: #eff6ff;
+    border: 1px solid #dbeafe;
+    color: #1e3a8a;
+}
+
+.alert-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Barra de Ações do Form (Voltar/Avançar) */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   PASSO 2: CONTROLE E UPLOAD DE FOTO DE PERFIL
+   ========================================================================== */
+.photo-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Switch */
+.switch-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.switch-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.switch-label {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.switch-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+}
+
+input:checked + .slider {
+    background-color: var(--success-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--success-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Área de Dropzone */
+.upload-zone {
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 32px 16px;
+    text-align: center;
+    background-color: var(--bg-card);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.upload-zone:hover:not(.disabled) {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.upload-zone.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #f1f5f9;
+}
+
+.hidden-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-icon {
+    font-size: 32px;
+}
+
+.upload-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.upload-link {
+    color: var(--primary-color);
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.upload-rules {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Preview da foto dentro do uploader */
+.photo-preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.photo-preview-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+    box-shadow: var(--shadow-sutil);
+}
+
+.btn-remove-badge {
+    background-color: #fee2e2;
+    color: var(--danger-color);
+    border: 1px solid #fca5a5;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-remove-badge:hover {
+    background-color: #fca5a5;
+    color: #ffffff;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   ITENS DINÂMICOS (FORMAÇÃO E EXPERIÊNCIA)
+   ========================================================================== */
+.dynamic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.dynamic-item {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    position: relative;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dynamic-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--bg-app);
+}
+
+.dynamic-item-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.btn-remove-item {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.btn-remove-item:hover {
+    color: var(--danger-color);
+    background-color: #fee2e2;
+}
+
+/* Checkbox simples e elegant */
+.checkbox-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+}
+
+.checkbox-inline input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   PASSO 5: TAGS DE SELEÇÃO DE HABILIDADES
+   ========================================================================== */
+.skills-tags-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.tag-badge-select {
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+.tag-badge-select:hover {
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.tag-badge-select.selected {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: var(--shadow-sutil);
+}
+
+.skill-custom-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.skills-selected-container {
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    min-height: 60px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.placeholder-text-muted {
+    font-size: 12px;
+    color: var(--text-muted);
+    width: 100%;
+    text-align: center;
+}
+
+.skill-tag-active {
+    background-color: #eff6ff;
+    border: 1.5px solid #bfdbfe;
+    color: #1e40af;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-remove-tag {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn-remove-tag:hover {
+    color: var(--danger-color);
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* ==========================================================================
+   PAINEL DIREITO: LIVE PREVIEW (A4 SIMULADO)
+   ========================================================================== */
+.preview-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.preview-sticky-container {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.preview-header-bar {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sutil);
+}
+
+.preview-info h3 {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.preview-info p {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.shadow-success {
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+/* A4 Sheet Simulation */
+.a4-sheet {
+    background-color: var(--cv-bg);
+    width: 100%;
+    aspect-ratio: 1 / 1.414; /* Proporção A4 exata */
+    padding: 30px;
+    overflow-y: auto; /* Permite scroll se o preview estourar na tela antes de exportar */
+    box-sizing: border-box;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+/* Ajustes de scroll do A4 do preview para parecer suave */
+.a4-sheet::-webkit-scrollbar {
+    width: 6px;
+}
+.a4-sheet::-webkit-scrollbar-thumb {
+    background-color: var(--border-hover);
+    border-radius: 4px;
+}
+
+/* ==========================================================================
+   ESTILOS DE RENDER DO CURRÍCULO (ESTILO RECRUTADOR ATS / RH)
+   ========================================================================== */
+.cv-document {
+    color: var(--cv-text-dark);
+    font-family: 'Inter', Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+    font-size: 12px;
+}
+
+/* Cabeçalho do Currículo no PDF */
+.cv-doc-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 2px solid var(--cv-primary);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+.cv-doc-profile-area {
+    flex-shrink: 0;
+}
+
+.cv-doc-photo {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--cv-primary);
+}
+
+.cv-doc-meta-area {
+    flex-grow: 1;
+}
+
+.cv-doc-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--cv-primary);
+    margin-bottom: 6px;
+}
+
+.cv-doc-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 6px;
+    row-gap: 4px;
+    font-size: 10px;
+    color: var(--cv-text-light);
+    font-weight: 500;
+}
+
+.cv-meta-item {
+    white-space: nowrap;
+}
+
+.cv-separator {
+    color: var(--cv-border);
+}
+
+/* Seções do Currículo no PDF */
+.cv-doc-section {
+    margin-bottom: 14px;
+}
+
+.cv-section-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--cv-primary);
+    border-bottom: 1px solid var(--cv-border);
+    padding-bottom: 3px;
+    margin-bottom: 8px;
+}
+
+.cv-section-content {
+    font-size: 10.5px;
+    color: var(--cv-text-dark);
+    line-height: 1.5;
+    text-align: justify;
+}
+
+/* Container de Itens Acadêmicos/Experiência no PDF */
+.cv-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cv-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cv-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.cv-item-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cv-text-dark);
+}
+
+.cv-item-subtitle {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--cv-text-light);
+}
+
+.cv-item-period {
+    font-size: 9.5px;
+    color: var(--cv-text-light);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.cv-item-desc {
+    font-size: 9.5px;
+    color: var(--cv-text-dark);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+/* Habilidades no PDF */
+.cv-skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.cv-skill-tag {
+    background-color: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: var(--cv-text-dark);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   BOTÃO DE TELA DE ALTERNAR VIEW (MOBILE)
+   ========================================================================== */
+.btn-toggle-view {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    border-radius: 50px;
+    padding: 14px 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.mobile-only {
+    display: none;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE-FIRST PRINCIPLE)
+   ========================================================================== */
+
+/* Telas Pequenas (Celulares e Tablets deitados) */
+@media (max-width: 991px) {
+    .main-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin: 16px auto;
+        padding: 0 16px;
+    }
+    
+    .mobile-only {
+        display: flex;
+    }
+
+    /* Ocultar Preview do Currículo no Mobile por padrão */
+    .preview-panel {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 150;
+        background-color: var(--bg-app);
+        padding: 16px;
+        overflow-y: auto;
+        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .preview-panel.mobile-visible {
+        display: flex;
+    }
+
+    .preview-sticky-container {
+        position: relative;
+        top: 0;
+        height: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .a4-sheet {
+        margin-top: 12px;
+        height: auto;
+        min-height: 500px;
+        box-shadow: var(--shadow-medium);
+    }
+    
+    .form-panel {
+        z-index: 10;
+    }
+
+    #cv-form {
+        padding: 20px;
+    }
+
+    .logo-area img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .logo-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+
+    .app-title {
+        font-size: 16px;
+    }
+
+    .app-subtitle {
+        font-size: 11px;
+    }
+
+    .header-actions {
+        display: none; /* Oculta botão de limpar do header no mobile para economizar espaço */
+    }
+
+    .step-label {
+        font-size: 9px;
+    }
+    
+    .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .stepper {
+        padding: 16px;
+    }
+    
+    .stepper-progress {
+        top: 32px;
+        left: 28px;
+        right: 28px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .col-span-2 {
+        grid-column: span 1;
+    }
+    
+    .app-footer {
+        padding: 20px 0;
+    }
+    
+    .lgpd-text {
+        font-size: 11px;
+        padding: 12px;
+    }
+}
+
+/* Otimização de Impressão */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #a4-sheet-content, #a4-sheet-content * {
+        visibility: visible;
+    }
+    #a4-sheet-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 210mm;
+        height: 297mm;
+        padding: 0;
+        margin: 0;
+        border: none;
+        box-shadow: none;
+    }
+}
