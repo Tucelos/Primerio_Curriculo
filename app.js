@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         experiencias: [],
         habilidades: [],
         cursos: [],
-        idiomas: [] // Adicionado seção dedicada de idiomas
+        idiomas: []
     };
 
     let currentStep = 1;
@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnNext = document.getElementById('btn-next');
     const btnClearAll = document.getElementById('btn-clear-all');
     const btnDownloadPdf = document.getElementById('btn-download-pdf');
+    const btnPrintNative = document.getElementById('btn-print-native'); // Novo botão nativo
     
     // Foto
     const togglePhoto = document.getElementById('toggle-photo');
@@ -122,11 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     
     const updateStepperUI = () => {
-        // Atualiza a barra de progresso
         const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
         progressBar.style.width = `${progressPercentage}%`;
 
-        // Atualiza os nós visuais
         stepNodes.forEach(node => {
             const stepNum = parseInt(node.getAttribute('data-step'));
             node.classList.remove('active', 'completed');
@@ -138,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Alterna os contêineres de conteúdo
         stepContents.forEach(content => {
             content.classList.remove('active');
             if (parseInt(content.getAttribute('data-step')) === currentStep) {
@@ -146,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Habilita/Desabilita botões
         if (currentStep === 1) {
             btnPrev.classList.add('disabled');
         } else {
@@ -169,22 +166,18 @@ document.addEventListener('DOMContentLoaded', () => {
             btnNext.classList.add('btn-primary');
         }
         
-        // Rola o painel do formulário para o topo
         document.querySelector('.form-panel').scrollTop = 0;
     };
 
-    // Validação de Campos em um Passo específico
     const validateStep = (step) => {
         let isValid = true;
         const currentContainer = document.querySelector(`.step-content[data-step="${step}"]`);
         
-        // Busca inputs obrigatórios e selects que não estão ocultos
         const requiredElements = currentContainer.querySelectorAll('[required]');
         
         requiredElements.forEach(element => {
             const formGroup = element.closest('.form-group');
             
-            // Tratamento especial para telefone
             if (element.id === 'input-telefone') {
                 const phoneDigits = element.value.replace(/\D/g, "");
                 if (phoneDigits.length < 10) {
@@ -194,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     formGroup.classList.remove('has-error');
                 }
             } 
-            // Validação de e-mail básico
             else if (element.type === 'email') {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(element.value)) {
@@ -204,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     formGroup.classList.remove('has-error');
                 }
             } 
-            // Outros campos obrigatórios
             else if (!element.value.trim()) {
                 isValid = false;
                 formGroup.classList.add('has-error');
@@ -213,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // No passo 3 (Educação) se adicionou alguma formação, valida os campos dela
         if (step === 3 && cvData.formacoes.length > 0) {
             cvData.formacoes.forEach(formacao => {
                 const itemContainer = document.querySelector(`[data-id="${formacao.id}"]`);
@@ -231,7 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // No passo 4 (Experiência) se adicionou alguma, valida
         if (step === 4 && cvData.experiencias.length > 0) {
             cvData.experiencias.forEach(exp => {
                 const itemContainer = document.querySelector(`[data-id="${exp.id}"]`);
@@ -249,7 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // No passo 5 (Idiomas adicionados), valida se os campos de texto não estão vazios
         if (step === 5 && cvData.idiomas.length > 0) {
             cvData.idiomas.forEach(idioma => {
                 const itemContainer = document.querySelector(`[data-id="${idioma.id}"]`);
@@ -261,6 +249,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else if (inputNome) {
                         inputNome.closest('.form-group').classList.remove('has-error');
                     }
+                    
+                    const selectNivel = itemContainer.querySelector('.select-idioma-nivel');
+                    if (selectNivel && !selectNivel.value) {
+                        isValid = false;
+                        selectNivel.closest('.form-group').classList.add('has-error');
+                    } else if (selectNivel) {
+                        selectNivel.closest('.form-group').classList.remove('has-error');
+                    }
                 }
             });
         }
@@ -268,26 +264,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return isValid;
     };
 
-    // Eventos de Navegação
     btnNext.addEventListener('click', () => {
         if (validateStep(currentStep)) {
             if (currentStep < totalSteps) {
                 currentStep++;
                 updateStepperUI();
             } else {
-                // Último passo: ativa o preview no mobile de forma clara para o usuário
                 if (window.innerWidth <= 991) {
                     toggleMobilePreview(true);
                 } else {
-                    // Desktop: Rola até o cabeçalho do Preview para mostrar o resultado final
                     document.getElementById('preview-panel').scrollIntoView({ behavior: 'smooth' });
                 }
             }
         } else {
-            // Vibração básica (se suportado pelo cel) ou animação de erro visual
             if (navigator.vibrate) navigator.vibrate(100);
             
-            // Foca no primeiro erro encontrado
             const firstError = document.querySelector('.has-error input, .has-error select, .has-error textarea');
             if (firstError) {
                 firstError.focus();
@@ -303,17 +294,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Permite navegar clicando diretamente nas bolinhas concluídas do stepper
     stepNodes.forEach(node => {
         node.addEventListener('click', () => {
             const targetStep = parseInt(node.getAttribute('data-step'));
             
-            // Se o usuário quer avançar, valida passos anteriores
             if (targetStep > currentStep) {
-                // Valida o passo atual
                 if (!validateStep(currentStep)) return;
                 
-                // Valida passos intermediários se ele pular mais de 1
                 for (let s = currentStep; s < targetStep; s++) {
                     if (!validateStep(s)) {
                         currentStep = s;
@@ -328,14 +315,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Remove classe de erro em tempo real ao digitar
     form.addEventListener('input', (e) => {
         if (e.target.closest('.form-group')) {
             e.target.closest('.form-group').classList.remove('has-error');
         }
     });
 
-    // Adiciona sugestões prontas ao objetivo profissional
     document.querySelectorAll('.btn-suggestion').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const targetId = btn.getAttribute('data-target');
@@ -344,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetInput.value = btn.innerText.replace(/"/g, '');
                 targetInput.closest('.form-group').classList.remove('has-error');
                 
-                // Dispara o evento input manual para atualizar o preview
                 const event = new Event('input', { bubbles: true });
                 targetInput.dispatchEvent(event);
             }
@@ -376,11 +360,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setPhotoState(e.target.checked);
     });
 
-    // Carregamento de Imagem
     const handleImageUpload = (file) => {
         if (!file) return;
 
-        // Validação básica de tamanho (2MB)
         if (file.size > 2 * 1024 * 1024) {
             alert('A imagem é muito grande! Escolha uma foto de até 2MB.');
             return;
@@ -391,12 +373,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const base64Data = e.target.result;
             cvData.fotoBase64 = base64Data;
             
-            // Atualiza UI de Upload
             imgProfilePreview.src = base64Data;
             photoPreviewContainer.classList.remove('hidden');
             document.querySelector('.upload-placeholder').classList.add('hidden');
             
-            // Atualiza Preview do Currículo
             rImgProfile.src = base64Data;
             
             updatePreview();
@@ -410,7 +390,6 @@ document.addEventListener('DOMContentLoaded', () => {
         handleImageUpload(file);
     });
 
-    // Drag and Drop
     uploadZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         if (!cvData.incluirFoto) return;
@@ -436,13 +415,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Remover Foto
     btnRemovePhoto.addEventListener('click', (e) => {
-        e.stopPropagation(); // Evita re-disparar clique de upload do drag-zone
+        e.stopPropagation();
         cvData.fotoBase64 = '';
         inputFoto.value = '';
         
-        // Zera UI
         photoPreviewContainer.classList.add('hidden');
         document.querySelector('.upload-placeholder').classList.remove('hidden');
         imgProfilePreview.src = '';
@@ -453,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 1: FORMAÇÃO ACADÊMICA
+    // COMPONENTE DINÂMICO 1: FORMAÇÃO ACADÊMICA (MÁSCARA RESPONSIVA DUO)
     // ==========================================================================
     
     const createFormacaoNode = (id, data = {}) => {
@@ -479,18 +456,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input type="text" class="input-formacao-curso" placeholder="Ex: Ensino Médio, Curso Técnico de Informática" value="${data.curso || ''}" required>
                     <span class="error-msg">Informe o curso ou nível.</span>
                 </div>
+                
                 <div class="form-group">
-                    <div class="form-grid" style="gap: 10px;">
-                        <div class="form-group">
-                            <label>Ano de Início <span class="required">*</span></label>
+                    <label>Período de Estudos</label>
+                    <!-- Grid-Duo impede quebra estreita no mobile para datas -->
+                    <div class="grid-duo">
+                        <div class="form-group" style="gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted);">Ano Início <span class="required">*</span></label>
                             <input type="text" class="input-formacao-inicio" placeholder="Ex: 2024" maxlength="4" value="${data.inicio || ''}" required>
                         </div>
-                        <div class="form-group">
-                            <label>Ano de Fim <span class="required">*</span></label>
+                        <div class="form-group" style="gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted);">Ano Fim <span class="required">*</span></label>
                             <input type="text" class="input-formacao-fim" placeholder="Ex: 2026" maxlength="15" value="${data.fim || ''}" required ${data.emAndamento ? 'disabled' : ''}>
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-group col-span-2">
                     <label class="checkbox-inline">
                         <input type="checkbox" class="input-formacao-andamento" ${data.emAndamento ? 'checked' : ''}>
@@ -500,7 +481,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Eventos internos do item dinâmico
         const btnRemove = item.querySelector('.btn-remove-item');
         btnRemove.addEventListener('click', () => {
             item.remove();
@@ -524,7 +504,6 @@ document.addEventListener('DOMContentLoaded', () => {
             syncFormacaoData(id, item);
         });
 
-        // Sincronização ao digitar
         item.querySelectorAll('input').forEach(input => {
             input.addEventListener('input', () => {
                 syncFormacaoData(id, item);
@@ -558,15 +537,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const uniqueId = 'edu_' + Date.now();
         const node = createFormacaoNode(uniqueId);
         listFormacao.appendChild(node);
-        // Cria elemento no array de dados vazio para ser atualizado
         cvData.formacoes.push({ id: uniqueId, escola: '', curso: '', inicio: '', fim: '', emAndamento: false });
-        
-        // Rola até o novo card
         node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 2: EXPERIÊNCIAS PROFISSIONAIS OU INFORMAIS
+    // COMPONENTE DINÂMICO 2: EXPERIÊNCIAS PROFISSIONAIS OU INFORMAIS (MÁSCARA RESPONSIVA DUO)
     // ==========================================================================
     
     const createExperienciaNode = (id, data = {}) => {
@@ -584,26 +560,30 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="form-grid">
                 <div class="form-group">
                     <label>Cargo ou Função <span class="required">*</span></label>
-                    <input type="text" class="input-exp-cargo" placeholder="Ex: Ajudante Geral, Voluntário, Vendedor" value="${data.cargo || ''}" required>
+                    <input type="text" class="input-exp-cargo" placeholder="Ex: Ajudante Geral, Voluntário" value="${data.cargo || ''}" required>
                     <span class="error-msg">Informe a função exercida.</span>
                 </div>
                 <div class="form-group">
                     <label>Local / Empresa / Projeto <span class="required">*</span></label>
-                    <input type="text" class="input-exp-empresa" placeholder="Ex: Padaria do Bairro, Ação Social Paróquia" value="${data.empresa || ''}" required>
+                    <input type="text" class="input-exp-empresa" placeholder="Ex: Padaria do Bairro" value="${data.empresa || ''}" required>
                     <span class="error-msg">Informe o local ou empresa.</span>
                 </div>
-                <div class="form-group">
-                    <div class="form-grid" style="gap: 10px;">
-                        <div class="form-group">
-                            <label>Ano de Início <span class="required">*</span></label>
+                
+                <div class="form-group col-span-2">
+                    <label>Período de Trabalho</label>
+                    <!-- Grid-Duo impede quebra no mobile -->
+                    <div class="grid-duo">
+                        <div class="form-group" style="gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted);">Ano Início <span class="required">*</span></label>
                             <input type="text" class="input-exp-inicio" placeholder="Ex: 2024" maxlength="4" value="${data.inicio || ''}" required>
                         </div>
-                        <div class="form-group">
-                            <label>Ano de Fim <span class="required">*</span></label>
+                        <div class="form-group" style="gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted);">Ano Fim <span class="required">*</span></label>
                             <input type="text" class="input-exp-fim" placeholder="Ex: 2025" maxlength="15" value="${data.fim || ''}" required ${data.atual ? 'disabled' : ''}>
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-group col-span-2">
                     <label class="checkbox-inline">
                         <input type="checkbox" class="input-exp-atual" ${data.atual ? 'checked' : ''}>
@@ -612,13 +592,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="form-group col-span-2">
                     <label>Resumo das Atividades <span class="required">*</span></label>
-                    <textarea class="input-exp-desc" rows="3" placeholder="O que você fazia lá? (Ex: Atendimento ao cliente, auxílio no controle de caixa, organização das mercadorias nas prateleiras e limpeza do ambiente)." required>${data.desc || ''}</textarea>
+                    <textarea class="input-exp-desc" rows="3" placeholder="O que você fazia lá? (Ex: Atendimento ao cliente, auxílio no controle de caixa, organização das mercadorias)." required>${data.desc || ''}</textarea>
                     <span class="error-msg">Por favor, faça um resumo rápido do que você fazia.</span>
                 </div>
             </div>
         `;
 
-        // Eventos internos
         const btnRemove = item.querySelector('.btn-remove-item');
         btnRemove.addEventListener('click', () => {
             item.remove();
@@ -642,7 +621,6 @@ document.addEventListener('DOMContentLoaded', () => {
             syncExperienciaData(id, item);
         });
 
-        // Sincronização ao digitar
         item.querySelectorAll('input, textarea').forEach(el => {
             el.addEventListener('input', () => {
                 syncExperienciaData(id, item);
@@ -678,12 +656,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const node = createExperienciaNode(uniqueId);
         listExperiencia.appendChild(node);
         cvData.experiencias.push({ id: uniqueId, cargo: '', empresa: '', inicio: '', fim: '', atual: false, desc: '' });
-        
         node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 3: CURSOS ADICIONAIS & CERTIFICAÇÕES
+    // COMPONENTE DINÂMICO 3: CURSOS ADICIONAIS & CERTIFICAÇÕES (MÁSCARA CORRIGIDA)
     // ==========================================================================
     
     const createCursoNode = (id, data = {}) => {
@@ -691,6 +668,9 @@ document.addEventListener('DOMContentLoaded', () => {
         item.className = 'dynamic-item';
         item.setAttribute('data-id', id);
         
+        // CORREÇÃO UX/UI: Remove sub-grids internos redundantes.
+        // O Nome do curso ganha largura completa, e a Escola e Carga ficam como itens normais,
+        // garantindo empilhamento limpo no celular sem espremer em "pedacinhos".
         item.innerHTML = `
             <div class="dynamic-item-header">
                 <span class="dynamic-item-title">Curso / Palestra</span>
@@ -699,24 +679,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>
             </div>
             <div class="form-grid">
-                <div class="form-group">
+                <div class="form-group col-span-2">
                     <label>Nome do Curso / Certificado <span class="required">*</span></label>
-                    <input type="text" class="input-curso-nome" placeholder="Ex: Informática Básica, Atendimento ao Cliente" value="${data.nome || ''}" required>
+                    <input type="text" class="input-curso-nome" placeholder="Ex: Informática Básica, Atendimento" value="${data.nome || ''}" required>
+                    <span class="error-msg">Informe o nome do curso ou palestra.</span>
                 </div>
                 <div class="form-group">
                     <label>Instituição Realizadora <span class="required">*</span></label>
                     <input type="text" class="input-curso-escola" placeholder="Ex: Fundação Bradesco, SEBRAE" value="${data.escola || ''}" required>
+                    <span class="error-msg">Informe a escola realizadora.</span>
                 </div>
-                <div class="form-grid" style="grid-column: span 2; gap: 10px;">
-                    <div class="form-group">
-                        <label>Carga Horária / Ano <span class="optional">(Opcional)</span></label>
-                        <input type="text" class="input-curso-carga" placeholder="Ex: 40 horas / 2025" value="${data.carga || ''}">
-                    </div>
+                <div class="form-group">
+                    <label>Carga Horária / Ano <span class="optional">(Opcional)</span></label>
+                    <input type="text" class="input-curso-carga" placeholder="Ex: 40 horas / 2025" value="${data.carga || ''}">
                 </div>
             </div>
         `;
 
-        // Eventos
         const btnRemove = item.querySelector('.btn-remove-item');
         btnRemove.addEventListener('click', () => {
             item.remove();
@@ -757,7 +736,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const node = createCursoNode(uniqueId);
         listCursos.appendChild(node);
         cvData.cursos.push({ id: uniqueId, nome: '', escola: '', carga: '' });
-        
         node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
@@ -797,7 +775,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // Eventos
         const btnRemove = item.querySelector('.btn-remove-item');
         btnRemove.addEventListener('click', () => {
             item.remove();
@@ -839,7 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const node = createIdiomaNode(uniqueId);
         listIdiomas.appendChild(node);
         cvData.idiomas.push({ id: uniqueId, nome: '', nivel: '' });
-        
         node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
@@ -847,7 +823,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // COMPONENTE: SISTEMA DE TAGS DE HABILIDADES
     // ==========================================================================
     
-    // Toggle de seleção de tag
     tagBadges.forEach(badge => {
         badge.addEventListener('click', () => {
             const skillName = badge.getAttribute('data-skill');
@@ -866,15 +841,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Adição de habilidade customizada
     const addCustomSkill = () => {
         const customSkill = inputCustomSkill.value.trim();
         if (customSkill) {
-            // Evita duplicações
             if (!cvData.habilidades.includes(customSkill)) {
                 cvData.habilidades.push(customSkill);
                 
-                // Se a habilidade existir no seletor padrão de badges, marca ela
                 tagBadges.forEach(badge => {
                     if (badge.getAttribute('data-skill').toLowerCase() === customSkill.toLowerCase()) {
                         badge.classList.add('selected');
@@ -898,9 +870,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Renderiza as tags ativas na caixinha de resumo do formulário
     const renderHabilidadesTags = () => {
-        // Limpa lista atual
         skillsSelectedList.querySelectorAll('.skill-tag-active').forEach(tag => tag.remove());
         
         if (cvData.habilidades.length === 0) {
@@ -916,11 +886,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button type="button" class="btn-remove-tag" title="Remover">×</button>
                 `;
                 
-                // Evento para remover individualmente
                 tag.querySelector('.btn-remove-tag').addEventListener('click', () => {
                     cvData.habilidades = cvData.habilidades.filter(h => h !== skill);
                     
-                    // Desmarca no grid superior se for tag pré-definida
                     tagBadges.forEach(badge => {
                         if (badge.getAttribute('data-skill') === skill) {
                             badge.classList.remove('selected');
@@ -945,10 +913,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     
     const updatePreview = () => {
-        // 1. DADOS PESSOAIS
         rNome.innerText = cvData.nome || 'Seu Nome Completo';
         
-        // Formata localização
         if (cvData.cidade || cvData.estado) {
             rLocalizacao.innerText = `${cvData.cidade || 'Cidade'}${cvData.estado ? ', ' + cvData.estado : ''}`;
             rLocalizacao.classList.remove('hidden');
@@ -960,16 +926,14 @@ document.addEventListener('DOMContentLoaded', () => {
         rEmail.innerText = cvData.email || 'seu.email@provedor.com';
         
         if (cvData.linkedin) {
-            rLinkedin.innerText = cvData.linkedin.replace(/^(https?:\/\/)?(www\.)?/, ""); // deixa link limpo
+            rLinkedin.innerText = cvData.linkedin.replace(/^(https?:\/\/)?(www\.)?/, "");
             rLinkedinContainer.classList.remove('hidden');
         } else {
             rLinkedinContainer.classList.add('hidden');
         }
 
-        // 2. OBJETIVO
         rObjetivo.innerText = cvData.objetivo || 'Escreva seu objetivo profissional de forma curta. Escolha uma das nossas dicas de redação rápida para se inspirar e iniciar!';
 
-        // 3. FOTO
         if (cvData.incluirFoto && cvData.fotoBase64) {
             rImgProfile.src = cvData.fotoBase64;
             rPhotoContainer.classList.remove('hidden');
@@ -977,7 +941,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rPhotoContainer.classList.add('hidden');
         }
 
-        // 4. FORMAÇÃO ACADÊMICA
         rFormacoesList.innerHTML = '';
         const formacoesValidas = cvData.formacoes.filter(f => f.escola.trim() || f.curso.trim());
         
@@ -987,7 +950,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const item = document.createElement('div');
                 item.className = 'cv-item';
                 
-                // Formatação do período
                 let periodo = '';
                 if (f.inicio) {
                     periodo = f.inicio;
@@ -1011,7 +973,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rSecFormacao.classList.add('hidden');
         }
 
-        // 5. EXPERIÊNCIAS
         rExperienciasList.innerHTML = '';
         const experienciasValidas = cvData.experiencias.filter(e => e.cargo.trim() || e.empresa.trim());
         
@@ -1045,7 +1006,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rSecExperiencia.classList.add('hidden');
         }
 
-        // 6. HABILIDADES
         rSkillsList.innerHTML = '';
         if (cvData.habilidades.length > 0) {
             rSecHabilidades.classList.remove('hidden');
@@ -1059,7 +1019,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rSecHabilidades.classList.add('hidden');
         }
 
-        // 7. CURSOS ADICIONAIS
         rCursosList.innerHTML = '';
         const cursosValidos = cvData.cursos.filter(c => c.nome.trim() || c.escola.trim());
         
@@ -1081,7 +1040,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rSecCursos.classList.add('hidden');
         }
 
-        // 8. IDIOMAS (NOVO RENDER)
         rIdiomasList.innerHTML = '';
         const idiomasValidos = cvData.idiomas.filter(i => i.nome.trim() && i.nivel);
         
@@ -1098,7 +1056,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Escuta campos estáticos
     const staticInputs = [
         { id: 'input-nome', prop: 'nome' },
         { id: 'input-email', prop: 'email' },
@@ -1120,7 +1077,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // PERSISTÊNCIA LOCAL (LOCALSTORAGE AUTOSAVE)
+    // PERSISTÊNCIA LOCAL COM BLINDAGEM CONTRA DADOS ANTIGOS (RETROCOMPATIBILIDADE)
     // ==========================================================================
     
     const saveLocalStorage = () => {
@@ -1132,9 +1089,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (storedData) {
             try {
                 const data = JSON.parse(storedData);
-                cvData = { ...cvData, ...data };
                 
-                // Preenche campos estáticos no formulário
+                // 🛡️ SEGURANÇA DE RETROCOMPATIBILIDADE:
+                // Previne que dados parciais antigos vindos de cookies do navegador
+                // subscrevam e destruam como 'undefined' os arrays dinâmicos novos (idiomas).
+                cvData = {
+                    nome: '', email: '', telefone: '', cidade: '', estado: '', linkedin: '', objetivo: '',
+                    incluirFoto: false, fotoBase64: '', formacoes: [], experiencias: [], habilidades: [], cursos: [], idiomas: [],
+                    ...data
+                };
+                
+                if (!cvData.formacoes) cvData.formacoes = [];
+                if (!cvData.experiencias) cvData.experiencias = [];
+                if (!cvData.habilidades) cvData.habilidades = [];
+                if (!cvData.cursos) cvData.cursos = [];
+                if (!cvData.idiomas) cvData.idiomas = [];
+
                 staticInputs.forEach(mapping => {
                     const input = document.getElementById(mapping.id);
                     if (input && cvData[mapping.prop]) {
@@ -1146,7 +1116,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     inputPhone.value = cvData.telefone;
                 }
 
-                // Carrega Foto
                 if (cvData.incluirFoto) {
                     setPhotoState(true);
                     if (cvData.fotoBase64) {
@@ -1159,54 +1128,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     setPhotoState(false);
                 }
 
-                // Carrega Dinâmicos: Formações
                 listFormacao.innerHTML = '';
-                if (cvData.formacoes && cvData.formacoes.length > 0) {
-                    cvData.formacoes.forEach(f => {
-                        const node = createFormacaoNode(f.id, f);
-                        listFormacao.appendChild(node);
-                    });
-                }
+                cvData.formacoes.forEach(f => {
+                    const node = createFormacaoNode(f.id, f);
+                    listFormacao.appendChild(node);
+                });
 
-                // Carrega Dinâmicos: Experiências
                 listExperiencia.innerHTML = '';
-                if (cvData.experiencias && cvData.experiencias.length > 0) {
-                    cvData.experiencias.forEach(e => {
-                        const node = createExperienciaNode(e.id, e);
-                        listExperiencia.appendChild(node);
-                    });
-                }
+                cvData.experiencias.forEach(e => {
+                    const node = createExperienciaNode(e.id, e);
+                    listExperiencia.appendChild(node);
+                });
 
-                // Carrega Dinâmicos: Cursos
                 listCursos.innerHTML = '';
-                if (cvData.cursos && cvData.cursos.length > 0) {
-                    cvData.cursos.forEach(c => {
-                        const node = createCursoNode(c.id, c);
-                        listCursos.appendChild(node);
-                    });
-                }
+                cvData.cursos.forEach(c => {
+                    const node = createCursoNode(c.id, c);
+                    listCursos.appendChild(node);
+                });
 
-                // Carrega Dinâmicos: Idiomas (Novo)
                 listIdiomas.innerHTML = '';
-                if (cvData.idiomas && cvData.idiomas.length > 0) {
-                    cvData.idiomas.forEach(i => {
-                        const node = createIdiomaNode(i.id, i);
-                        listIdiomas.appendChild(node);
-                    });
-                }
+                cvData.idiomas.forEach(i => {
+                    const node = createIdiomaNode(i.id, i);
+                    listIdiomas.appendChild(node);
+                });
 
-                // Carrega Habilidades
-                if (cvData.habilidades && cvData.habilidades.length > 0) {
-                    tagBadges.forEach(badge => {
-                        const skill = badge.getAttribute('data-skill');
-                        if (cvData.habilidades.includes(skill)) {
-                            badge.classList.add('selected');
-                        }
-                    });
-                    renderHabilidadesTags();
-                }
-
-                // Atualiza todo o Preview
+                tagBadges.forEach(badge => {
+                    const skill = badge.getAttribute('data-skill');
+                    if (cvData.habilidades.includes(skill)) {
+                        badge.classList.add('selected');
+                    }
+                });
+                renderHabilidadesTags();
+                
                 updatePreview();
 
             } catch (err) {
@@ -1215,7 +1168,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Botão Limpar Tudo
     btnClearAll.addEventListener('click', () => {
         if (confirm("Você quer mesmo apagar tudo o que preencheu? Seu currículo será esvaziado no navegador.")) {
             localStorage.removeItem('cv_builder_jovem_data');
@@ -1247,70 +1199,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // EXPORTAÇÃO E DOWNLOAD DO PDF COM HTML2PDF.JS (CORRIGIDO PARA GITHUB PAGES)
+    // EXPORTAÇÃO E DOWNLOAD DO PDF COM HTML2PDF.JS (CORRIGIDO PARA GITHUB PAGES / SAFARI)
     // ==========================================================================
     
+    // Conecta o evento ao botão alternativo nativo (Imprimir / Salvar)
+    btnPrintNative.addEventListener('click', () => {
+        window.print();
+    });
+
     btnDownloadPdf.addEventListener('click', () => {
-        // Validação rápida de dados mínimos no formulário antes de deixar exportar
         if (!cvData.nome.trim()) {
             alert("Escreva pelo menos o seu Nome Completo para baixar o currículo.");
             currentStep = 1;
             updateStepperUI();
-            toggleMobilePreview(false); // Fecha o preview no mobile se for pra editar
+            toggleMobilePreview(false);
             document.getElementById('input-nome').focus();
             return;
         }
 
-        // Recupera o botão e define os estados visuais de processamento
         const originalContent = btnDownloadPdf.innerHTML;
         btnDownloadPdf.innerHTML = `
             <svg class="spinner" width="20" height="20" viewBox="0 0 50 50" style="margin-right: 8px; animation: spin 1s linear infinite;"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"></circle></svg>
-            Gerando PDF...
+            Gerando...
         `;
         btnDownloadPdf.setAttribute('disabled', 'true');
         btnDownloadPdf.style.opacity = '0.85';
 
-        // ⏱️ TIMER DE SEGURANÇA (FALLBACK / PLANO B)
-        // Se a geração demorar mais de 7 segundos (comum em navegadores de celulares modestos por falta de memória do canvas),
-        // avisamos o usuário e damos a opção de usar o sistema nativo de impressão, que é 100% infalível e instantâneo.
+        // Timer de segurança de fallback
         const printFallbackTimeout = setTimeout(() => {
-            if (confirm("A geração automática de imagem está demorando um pouco no seu aparelho.\n\nDeseja abrir a tela de salvamento/impressão nativa do seu celular/computador? Ela é mais rápida e infalível! (Basta selecionar 'Salvar como PDF' na tela que abrir).")) {
+            if (confirm("A geração em lote do PDF pelo navegador está demorando. Deseja abrir a tela de salvamento/impressão nativa que é instantânea? (Basta selecionar 'Salvar como PDF' na tela).")) {
                 window.print();
             }
-            // Restaura o botão
             btnDownloadPdf.innerHTML = originalContent;
             btnDownloadPdf.removeAttribute('disabled');
             btnDownloadPdf.style.opacity = '1';
-        }, 7000);
+        }, 6000);
 
-        // 🚀 CORREÇÃO TÉCNICA PRINCIPAL PARA GITHUB PAGES / SAFARI / CHROME MÓVEL:
-        // Em vez de processar diretamente o elemento visível, que pode estar sujeito a descompressões, scroll e
-        // escalonamento responsivo (Flexbox/Grid do painel dual), nós clonamos o elemento e o injetamos em um container
-        // invisível fora da tela com dimensões exatas físicas de A4 de 210mm de largura.
-        // Isso resolve 100% os bugs de desalinhamento de margens, corte de páginas e estouro de memória!
+        // 🚀 CORREÇÃO CRÍTICA DO TRAVAMENTO DO PDF NO GITHUB PAGES:
+        // Colocar elementos em left: -9999px impede que o Chrome e Safari móveis os renderizem no viewport ativo,
+        // fazendo com que o html2canvas e o gerador de imagem da biblioteca entrem em estado de congelamento.
+        // Solução: Anexar o clone com position: fixed, opacity: 0.01 (invisível ao olho) e z-index: -9999 (por baixo de tudo).
+        // Isso força a renderização gráfica ativa na GPU do celular, liberando o processo instantaneamente!
         
         const originalElement = document.getElementById('cv-target-render');
         
-        // Cria container clone invisível fora da tela
         const cloneWrapper = document.createElement('div');
         cloneWrapper.id = 'cv-print-clone-wrapper';
-        cloneWrapper.style.position = 'absolute';
-        cloneWrapper.style.left = '-9999px';
+        cloneWrapper.style.position = 'fixed';
+        cloneWrapper.style.left = '0';
         cloneWrapper.style.top = '0';
-        cloneWrapper.style.width = '210mm'; // Largura exata A4 física
+        cloneWrapper.style.width = '210mm'; // Largura física A4 exata
         cloneWrapper.style.backgroundColor = '#ffffff';
         cloneWrapper.style.margin = '0';
         cloneWrapper.style.padding = '0';
         cloneWrapper.style.boxSizing = 'border-box';
+        cloneWrapper.style.opacity = '0.01'; // Quase invisível
+        cloneWrapper.style.zIndex = '-9999'; // Fica atrás de absolutamente tudo
+        cloneWrapper.style.pointerEvents = 'none'; // Impede interceptação de cliques do usuário
         
-        // Clona e ajusta estilos no clone
         const clonedElement = originalElement.cloneNode(true);
         clonedElement.style.width = '210mm';
-        clonedElement.style.padding = '35px'; // Padding perfeitamente regulado para as margens do PDF
+        clonedElement.style.padding = '35px'; // Margem regulada para o PDF
         clonedElement.style.boxSizing = 'border-box';
-        clonedElement.style.display = 'block'; // Garante exibição
+        clonedElement.style.display = 'block';
         
-        // Garante que todas as imagens no clone tenham CORS limpo e carregamento completo
         const clonedImages = clonedElement.querySelectorAll('img');
         clonedImages.forEach(img => {
             img.setAttribute('crossorigin', 'anonymous');
@@ -1319,13 +1271,11 @@ document.addEventListener('DOMContentLoaded', () => {
         cloneWrapper.appendChild(clonedElement);
         document.body.appendChild(cloneWrapper);
 
-        // Nome amigável do arquivo
         const cleanName = cvData.nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
         const filename = `Curriculo_${cleanName || 'Meu_Primeiro_Emprego'}.pdf`;
 
-        // Configuração balanceada de html2pdf (escala 2 é super nítida e consome 4x menos RAM que escala 3, evitando crashes)
         const opt = {
-            margin:       0, // Margem controlada diretamente pelo padding de 35px do clone
+            margin:       0,
             filename:     filename,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { 
@@ -1342,27 +1292,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Roda o html2pdf.js com tratamento de promessa
         html2pdf().set(opt).from(cloneWrapper).save().then(() => {
-            // Sucesso! Limpa o timer de fallback
             clearTimeout(printFallbackTimeout);
-            
-            // Remove o clone invisível do DOM
             cloneWrapper.remove();
             
-            // Restaura o botão original após baixar
             btnDownloadPdf.innerHTML = originalContent;
             btnDownloadPdf.removeAttribute('disabled');
             btnDownloadPdf.style.opacity = '1';
         }).catch(err => {
-            console.error("Erro na geração automática do PDF:", err);
-            
-            // Limpa o timer de fallback
+            console.error("Erro na geração do PDF:", err);
             clearTimeout(printFallbackTimeout);
-            
-            // Remove o clone
             cloneWrapper.remove();
             
-            // Plano B Imediato em caso de erro da biblioteca
-            if (confirm("Houve um pequeno problema na renderização de imagem pelo navegador.\n\nDeseja usar o salvamento nativo do seu aparelho? É instantâneo e garantido!")) {
+            if (confirm("Seu navegador impediu o download automático. Deseja usar o salvamento oficial do aparelho em PDF?")) {
                 window.print();
             }
             
@@ -1372,7 +1313,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Estilos extras injetados para a animação do loader do spinner
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes spin {
@@ -1387,8 +1327,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ==========================================================================
     // BOOTSTRAP - INICIALIZAÇÃO DA PÁGINA
     // ==========================================================================
-    
-    // Tenta carregar dados do LocalStorage, caso contrário inicializa UI limpa
     loadLocalStorage();
     updateStepperUI();
 });

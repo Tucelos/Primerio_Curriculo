@@ -333,15 +333,21 @@
         <!-- Painel Direito: Live Preview (A4 Simulado) -->
         <section class="preview-panel" id="preview-panel">
             <div class="preview-sticky-container">
-                <div class="preview-header-bar">
+                <div class="preview-header-bar" style="flex-wrap: wrap; gap: 12px;">
                     <div class="preview-info">
                         <h3>Visualização do Currículo</h3>
                         <p>Exatamente como ficará o seu PDF final</p>
                     </div>
-                    <button type="button" id="btn-download-pdf" class="btn btn-success flex-center shadow-success">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Baixar Currículo (PDF)
-                    </button>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btn-download-pdf" class="btn btn-success flex-center shadow-success">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Baixar PDF
+                        </button>
+                        <button type="button" id="btn-print-native" class="btn btn-secondary-outline flex-center" title="Opção alternativa caso o download trave no seu celular">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                            Imprimir / Salvar
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Folha A4 Simulada -->
