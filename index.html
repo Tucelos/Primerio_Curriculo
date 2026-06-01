@@ -278,16 +278,33 @@
 
                     <!-- Cursos Livres e Certificações -->
                     <div class="form-group">
-                        <label>Cursos Adicionais & Idiomas</label>
-                        <p class="helper-text font-weight-normal">Cursos de internet, palestras, oficinas ou idiomas que você fez.</p>
+                        <label>Cursos Adicionais & Certificações</label>
+                        <p class="helper-text font-weight-normal">Cursos de internet, palestras, oficinas ou informática básica que você concluiu.</p>
                         
                         <div class="dynamic-list" id="list-cursos">
                             <!-- Cursos serão inseridos dinamicamente -->
                         </div>
 
-                        <button type="button" id="btn-add-curso" class="btn btn-secondary btn-full flex-center">
+                        <button type="button" id="btn-add-curso" class="btn btn-secondary btn-full flex-center" style="margin-bottom: 20px;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Adicionar Curso / Idioma
+                            Adicionar Curso / Certificado
+                        </button>
+                    </div>
+
+                    <hr class="divider">
+
+                    <!-- Idiomas Dinâmicos -->
+                    <div class="form-group">
+                        <label>Idiomas falados</label>
+                        <p class="helper-text font-weight-normal">Adicione os idiomas que você fala e seu nível de conhecimento (não precisa de certificado!).</p>
+                        
+                        <div class="dynamic-list" id="list-idiomas">
+                            <!-- Idiomas serão inseridos dinamicamente -->
+                        </div>
+
+                        <button type="button" id="btn-add-idioma" class="btn btn-secondary btn-full flex-center">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Adicionar Idioma
                         </button>
                     </div>
                 </div>
@@ -386,6 +403,14 @@
                         <section class="cv-doc-section hidden" id="render-sec-cursos">
                             <h3 class="cv-section-title">Cursos Complementares & Certificações</h3>
                             <div class="cv-items-container" id="render-cursos-list">
+                                <!-- Preenchido dinamicamente -->
+                            </div>
+                        </section>
+
+                        <!-- Idiomas -->
+                        <section class="cv-doc-section hidden" id="render-sec-idiomas">
+                            <h3 class="cv-section-title">Idiomas</h3>
+                            <div class="cv-skills-grid" id="render-idiomas-list">
                                 <!-- Preenchido dinamicamente -->
                             </div>
                         </section>

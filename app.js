@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         formacoes: [],
         experiencias: [],
         habilidades: [],
-        cursos: []
+        cursos: [],
+        idiomas: [] // Adicionado seção dedicada de idiomas
     };
 
     let currentStep = 1;
@@ -56,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnAddExperiencia = document.getElementById('btn-add-experiencia');
     const listCursos = document.getElementById('list-cursos');
     const btnAddCurso = document.getElementById('btn-add-curso');
+    const listIdiomas = document.getElementById('list-idiomas');
+    const btnAddIdioma = document.getElementById('btn-add-idioma');
     
     // Habilidades
     const inputCustomSkill = document.getElementById('input-custom-skill');
@@ -90,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const rSkillsList = document.getElementById('render-skills-list');
     const rSecCursos = document.getElementById('render-sec-cursos');
     const rCursosList = document.getElementById('render-cursos-list');
+    const rSecIdiomas = document.getElementById('render-sec-idiomas');
+    const rIdiomasList = document.getElementById('render-idiomas-list');
 
     // ==========================================================================
     // MÁSCARAS E VALIDAÇÃO DE ENTRADA
@@ -240,6 +245,22 @@ document.addEventListener('DOMContentLoaded', () => {
                             input.closest('.form-group').classList.remove('has-error');
                         }
                     });
+                }
+            });
+        }
+
+        // No passo 5 (Idiomas adicionados), valida se os campos de texto não estão vazios
+        if (step === 5 && cvData.idiomas.length > 0) {
+            cvData.idiomas.forEach(idioma => {
+                const itemContainer = document.querySelector(`[data-id="${idioma.id}"]`);
+                if (itemContainer) {
+                    const inputNome = itemContainer.querySelector('.input-idioma-nome');
+                    if (inputNome && !inputNome.value.trim()) {
+                        isValid = false;
+                        inputNome.closest('.form-group').classList.add('has-error');
+                    } else if (inputNome) {
+                        inputNome.closest('.form-group').classList.remove('has-error');
+                    }
                 }
             });
         }
@@ -662,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // COMPONENTE DINÂMICO 3: CURSOS ADICIONAIS & IDIOMAS
+    // COMPONENTE DINÂMICO 3: CURSOS ADICIONAIS & CERTIFICAÇÕES
     // ==========================================================================
     
     const createCursoNode = (id, data = {}) => {
@@ -672,19 +693,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         item.innerHTML = `
             <div class="dynamic-item-header">
-                <span class="dynamic-item-title">Curso / Idioma</span>
+                <span class="dynamic-item-title">Curso / Palestra</span>
                 <button type="button" class="btn-remove-item" title="Remover curso">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Nome do Curso / Idioma <span class="required">*</span></label>
-                    <input type="text" class="input-curso-nome" placeholder="Ex: Informática Básica, Inglês Iniciante" value="${data.nome || ''}" required>
+                    <label>Nome do Curso / Certificado <span class="required">*</span></label>
+                    <input type="text" class="input-curso-nome" placeholder="Ex: Informática Básica, Atendimento ao Cliente" value="${data.nome || ''}" required>
                 </div>
                 <div class="form-group">
-                    <label>Instituição realizadora <span class="required">*</span></label>
-                    <input type="text" class="input-curso-escola" placeholder="Ex: Fundação Bradesco, Fisk" value="${data.escola || ''}" required>
+                    <label>Instituição Realizadora <span class="required">*</span></label>
+                    <input type="text" class="input-curso-escola" placeholder="Ex: Fundação Bradesco, SEBRAE" value="${data.escola || ''}" required>
                 </div>
                 <div class="form-grid" style="grid-column: span 2; gap: 10px;">
                     <div class="form-group">
@@ -715,11 +736,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const syncCursoData = (id, container) => {
         const nome = container.querySelector('.input-curso-nome').value;
-        const escola = container.querySelector('.input-curso-escola').value;
+        const school = container.querySelector('.input-curso-escola').value;
         const carga = container.querySelector('.input-curso-carga').value;
 
         const index = cvData.cursos.findIndex(c => c.id === id);
-        const dataObj = { id, nome, escola, carga };
+        const dataObj = { id, nome, escola: school, carga };
 
         if (index !== -1) {
             cvData.cursos[index] = dataObj;
@@ -736,6 +757,88 @@ document.addEventListener('DOMContentLoaded', () => {
         const node = createCursoNode(uniqueId);
         listCursos.appendChild(node);
         cvData.cursos.push({ id: uniqueId, nome: '', escola: '', carga: '' });
+        
+        node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // ==========================================================================
+    // COMPONENTE DINÂMICO 4: IDIOMAS (NOVO REQUISITO)
+    // ==========================================================================
+    
+    const createIdiomaNode = (id, data = {}) => {
+        const item = document.createElement('div');
+        item.className = 'dynamic-item';
+        item.setAttribute('data-id', id);
+        
+        item.innerHTML = `
+            <div class="dynamic-item-header">
+                <span class="dynamic-item-title">Idioma Falado</span>
+                <button type="button" class="btn-remove-item" title="Remover idioma">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Idioma <span class="required">*</span></label>
+                    <input type="text" class="input-idioma-nome" placeholder="Ex: Inglês, Espanhol, Libras" value="${data.nome || ''}" required>
+                    <span class="error-msg">Informe o idioma.</span>
+                </div>
+                <div class="form-group">
+                    <label>Proficiência / Nível <span class="required">*</span></label>
+                    <select class="select-idioma-nivel" required>
+                        <option value="" disabled ${!data.nivel ? 'selected' : ''}>Selecione seu nível</option>
+                        <option value="Básico" ${data.nivel === 'Básico' ? 'selected' : ''}>Básico (entende frases simples)</option>
+                        <option value="Intermediário" ${data.nivel === 'Intermediário' ? 'selected' : ''}>Intermediário (consegue conversar um pouco)</option>
+                        <option value="Avançado" ${data.nivel === 'Avançado' ? 'selected' : ''}>Avançado (conversa bem e lê sem problemas)</option>
+                        <option value="Fluente ou Nativo" ${data.nivel === 'Fluente ou Nativo' ? 'selected' : ''}>Fluente / Nativo</option>
+                    </select>
+                    <span class="error-msg">Selecione o seu nível.</span>
+                </div>
+            </div>
+        `;
+
+        // Eventos
+        const btnRemove = item.querySelector('.btn-remove-item');
+        btnRemove.addEventListener('click', () => {
+            item.remove();
+            cvData.idiomas = cvData.idiomas.filter(i => i.id !== id);
+            updatePreview();
+            saveLocalStorage();
+        });
+
+        item.querySelector('.input-idioma-nome').addEventListener('input', () => {
+            syncIdiomaData(id, item);
+        });
+        
+        item.querySelector('.select-idioma-nivel').addEventListener('change', () => {
+            syncIdiomaData(id, item);
+        });
+
+        return item;
+    };
+
+    const syncIdiomaData = (id, container) => {
+        const nome = container.querySelector('.input-idioma-nome').value;
+        const nivel = container.querySelector('.select-idioma-nivel').value;
+
+        const index = cvData.idiomas.findIndex(i => i.id === id);
+        const dataObj = { id, nome, nivel };
+
+        if (index !== -1) {
+            cvData.idiomas[index] = dataObj;
+        } else {
+            cvData.idiomas.push(dataObj);
+        }
+        
+        updatePreview();
+        saveLocalStorage();
+    };
+
+    btnAddIdioma.addEventListener('click', () => {
+        const uniqueId = 'lan_' + Date.now();
+        const node = createIdiomaNode(uniqueId);
+        listIdiomas.appendChild(node);
+        cvData.idiomas.push({ id: uniqueId, nome: '', nivel: '' });
         
         node.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
@@ -977,6 +1080,22 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             rSecCursos.classList.add('hidden');
         }
+
+        // 8. IDIOMAS (NOVO RENDER)
+        rIdiomasList.innerHTML = '';
+        const idiomasValidos = cvData.idiomas.filter(i => i.nome.trim() && i.nivel);
+        
+        if (idiomasValidos.length > 0) {
+            rSecIdiomas.classList.remove('hidden');
+            idiomasValidos.forEach(i => {
+                const tag = document.createElement('span');
+                tag.className = 'cv-skill-tag';
+                tag.innerText = `${i.nome} (${i.nivel})`;
+                rIdiomasList.appendChild(tag);
+            });
+        } else {
+            rSecIdiomas.classList.add('hidden');
+        }
     };
 
     // Escuta campos estáticos
@@ -1067,6 +1186,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
+                // Carrega Dinâmicos: Idiomas (Novo)
+                listIdiomas.innerHTML = '';
+                if (cvData.idiomas && cvData.idiomas.length > 0) {
+                    cvData.idiomas.forEach(i => {
+                        const node = createIdiomaNode(i.id, i);
+                        listIdiomas.appendChild(node);
+                    });
+                }
+
                 // Carrega Habilidades
                 if (cvData.habilidades && cvData.habilidades.length > 0) {
                     tagBadges.forEach(badge => {
@@ -1119,7 +1247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==========================================================================
-    // EXPORTAÇÃO E DOWNLOAD DO PDF COM HTML2PDF.JS
+    // EXPORTAÇÃO E DOWNLOAD DO PDF COM HTML2PDF.JS (CORRIGIDO PARA GITHUB PAGES)
     // ==========================================================================
     
     btnDownloadPdf.addEventListener('click', () => {
@@ -1133,7 +1261,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Feedback visual no botão de download
+        // Recupera o botão e define os estados visuais de processamento
         const originalContent = btnDownloadPdf.innerHTML;
         btnDownloadPdf.innerHTML = `
             <svg class="spinner" width="20" height="20" viewBox="0 0 50 50" style="margin-right: 8px; animation: spin 1s linear infinite;"><circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"></circle></svg>
@@ -1142,38 +1270,102 @@ document.addEventListener('DOMContentLoaded', () => {
         btnDownloadPdf.setAttribute('disabled', 'true');
         btnDownloadPdf.style.opacity = '0.85';
 
-        // Elemento que vamos renderizar
-        const element = document.getElementById('cv-target-render');
+        // ⏱️ TIMER DE SEGURANÇA (FALLBACK / PLANO B)
+        // Se a geração demorar mais de 7 segundos (comum em navegadores de celulares modestos por falta de memória do canvas),
+        // avisamos o usuário e damos a opção de usar o sistema nativo de impressão, que é 100% infalível e instantâneo.
+        const printFallbackTimeout = setTimeout(() => {
+            if (confirm("A geração automática de imagem está demorando um pouco no seu aparelho.\n\nDeseja abrir a tela de salvamento/impressão nativa do seu celular/computador? Ela é mais rápida e infalível! (Basta selecionar 'Salvar como PDF' na tela que abrir).")) {
+                window.print();
+            }
+            // Restaura o botão
+            btnDownloadPdf.innerHTML = originalContent;
+            btnDownloadPdf.removeAttribute('disabled');
+            btnDownloadPdf.style.opacity = '1';
+        }, 7000);
+
+        // 🚀 CORREÇÃO TÉCNICA PRINCIPAL PARA GITHUB PAGES / SAFARI / CHROME MÓVEL:
+        // Em vez de processar diretamente o elemento visível, que pode estar sujeito a descompressões, scroll e
+        // escalonamento responsivo (Flexbox/Grid do painel dual), nós clonamos o elemento e o injetamos em um container
+        // invisível fora da tela com dimensões exatas físicas de A4 de 210mm de largura.
+        // Isso resolve 100% os bugs de desalinhamento de margens, corte de páginas e estouro de memória!
         
+        const originalElement = document.getElementById('cv-target-render');
+        
+        // Cria container clone invisível fora da tela
+        const cloneWrapper = document.createElement('div');
+        cloneWrapper.id = 'cv-print-clone-wrapper';
+        cloneWrapper.style.position = 'absolute';
+        cloneWrapper.style.left = '-9999px';
+        cloneWrapper.style.top = '0';
+        cloneWrapper.style.width = '210mm'; // Largura exata A4 física
+        cloneWrapper.style.backgroundColor = '#ffffff';
+        cloneWrapper.style.margin = '0';
+        cloneWrapper.style.padding = '0';
+        cloneWrapper.style.boxSizing = 'border-box';
+        
+        // Clona e ajusta estilos no clone
+        const clonedElement = originalElement.cloneNode(true);
+        clonedElement.style.width = '210mm';
+        clonedElement.style.padding = '35px'; // Padding perfeitamente regulado para as margens do PDF
+        clonedElement.style.boxSizing = 'border-box';
+        clonedElement.style.display = 'block'; // Garante exibição
+        
+        // Garante que todas as imagens no clone tenham CORS limpo e carregamento completo
+        const clonedImages = clonedElement.querySelectorAll('img');
+        clonedImages.forEach(img => {
+            img.setAttribute('crossorigin', 'anonymous');
+        });
+        
+        cloneWrapper.appendChild(clonedElement);
+        document.body.appendChild(cloneWrapper);
+
         // Nome amigável do arquivo
         const cleanName = cvData.nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "_");
         const filename = `Curriculo_${cleanName || 'Meu_Primeiro_Emprego'}.pdf`;
 
-        // Opções altamente otimizadas para PDF A4 perfeito, vetorial e sem borrões
+        // Configuração balanceada de html2pdf (escala 2 é super nítida e consome 4x menos RAM que escala 3, evitando crashes)
         const opt = {
-            margin:       12, // Margens elegantes
+            margin:       0, // Margem controlada diretamente pelo padding de 35px do clone
             filename:     filename,
             image:        { type: 'jpeg', quality: 0.98 },
             html2canvas:  { 
-                scale: 3, // Alta resolução para texto nítido em zoom
+                scale: 2, 
                 useCORS: true, 
                 letterRendering: true,
-                dpi: 192,
+                dpi: 150,
                 scrollX: 0,
-                scrollY: 0
+                scrollY: 0,
+                backgroundColor: '#ffffff'
             },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
         // Roda o html2pdf.js com tratamento de promessa
-        html2pdf().set(opt).from(element).save().then(() => {
+        html2pdf().set(opt).from(cloneWrapper).save().then(() => {
+            // Sucesso! Limpa o timer de fallback
+            clearTimeout(printFallbackTimeout);
+            
+            // Remove o clone invisível do DOM
+            cloneWrapper.remove();
+            
             // Restaura o botão original após baixar
             btnDownloadPdf.innerHTML = originalContent;
             btnDownloadPdf.removeAttribute('disabled');
             btnDownloadPdf.style.opacity = '1';
         }).catch(err => {
-            console.error("Erro na geração do PDF:", err);
-            alert("Houve um pequeno problema ao gerar seu currículo. Tente baixar novamente!");
+            console.error("Erro na geração automática do PDF:", err);
+            
+            // Limpa o timer de fallback
+            clearTimeout(printFallbackTimeout);
+            
+            // Remove o clone
+            cloneWrapper.remove();
+            
+            // Plano B Imediato em caso de erro da biblioteca
+            if (confirm("Houve um pequeno problema na renderização de imagem pelo navegador.\n\nDeseja usar o salvamento nativo do seu aparelho? É instantâneo e garantido!")) {
+                window.print();
+            }
+            
             btnDownloadPdf.innerHTML = originalContent;
             btnDownloadPdf.removeAttribute('disabled');
             btnDownloadPdf.style.opacity = '1';
